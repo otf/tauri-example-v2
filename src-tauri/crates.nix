@@ -66,9 +66,9 @@
               export RUST_SRC_PATH="${config.nci.toolchains.shell}/lib/rustlib/src/rust/library"
             '';
 
-            # buildPhase = ''
-            #   cargo tauri build
-            # '';
+            buildPhase = ''
+              cargo tauri build -b none
+            '';
             # dontInstall = true;
           };
         };
