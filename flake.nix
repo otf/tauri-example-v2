@@ -1,5 +1,5 @@
 {
-  description = "Rust development environment";
+  description = "tauri-app-v1";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -39,8 +39,7 @@
               packages = (old.packages or []) ++ [cargo-tauri];
             }
         );
-        # in {
-        # packages.default = crateOutputs.packages.release;
+        packages.default = crateOutputs.packages.release;
       };
       flake = {
         # The usual flake attributes can be defined here.

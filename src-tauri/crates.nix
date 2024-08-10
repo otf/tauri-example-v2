@@ -46,12 +46,12 @@
         depsDrvConfig = {
           mkDerivation = {
             nativeBuildInputs = nativeBuildPackages;
+            buildInputs = packages;
           };
         };
         drvConfig = {
           mkDerivation = {
-            inherit (depsDrvConfig.mkDerivation) nativeBuildInputs;
-            buildInputs = packages;
+            inherit (depsDrvConfig.mkDerivation) nativeBuildInputs buildInputs;
             # shellHook = with pkgs; ''
             #   export LD_LIBRARY_PATH="${
             #     lib.makeLibraryPath libraries
