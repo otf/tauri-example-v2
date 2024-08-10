@@ -44,32 +44,25 @@
     nci.toolchainConfig = ./rust-toolchain.toml;
     nci.crates = {
       ${crateName} = {
-        # depsDrvConfig = {
-        #   deps.stdenv = pkgs.clangStdenv;
-        # };
+        depsDrvConfig = {
+          mkDerivation = {
+            nativeBuildInputs = nativeBuildPackages;
+          };
+        };
         drvConfig = {
-          # deps.stdenv = pkgs.clangStdenv;
           mkDerivation = {
             nativeBuildInputs = nativeBuildPackages;
             buildInputs = packages;
-            # LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib";
             shellHook = with pkgs; ''
-              echo "Hello world, tauri with mkDerivation!"
-              # export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
-
               export LD_LIBRARY_PATH="${
                 lib.makeLibraryPath libraries
               }:$LD_LIBRARY_PATH"
-              export OPENSSL_INCLUDE_DIR="${openssl.dev}/include/openssl"
-              export OPENSSL_LIB_DIR="${openssl.out}/lib"
-              export OPENSSL_ROOT_DIR="${openssl.out}"
-              export RUST_SRC_PATH="${config.nci.toolchains.shell}/lib/rustlib/src/rust/library"
             '';
-
-            buildPhase = ''
-              cargo tauri build -b none
-            '';
-            # dontInstall = true;
+            # export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
+            # export OPENSSL_INCLUDE_DIR="${openssl.dev}/include/openssl"
+            # export OPENSSL_LIB_DIR="${openssl.out}/lib"
+            # export OPENSSL_ROOT_DIR="${openssl.out}"
+            # export RUST_SRC_PATH="${config.nci.toolchains.shell}/lib/rustlib/src/rust/library"
           };
         };
       };
