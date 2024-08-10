@@ -34,7 +34,7 @@
       }: let
         crateOutputs = config.nci.outputs.tauri-app;
       in {
-        devShells.default = crateOutputs.devShell;
+        # devShells.default = crateOutputs.devShell;
         packages.default = crateOutputs.packages.release;
       };
       flake = {
