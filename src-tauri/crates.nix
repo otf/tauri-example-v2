@@ -43,7 +43,7 @@
     nci.projects.${crateName}.path = ./.;
     nci.toolchainConfig = ./rust-toolchain.toml;
     nci.crates = {
-      ${crateName} = {
+      ${crateName} = rec {
         depsDrvConfig = {
           mkDerivation = {
             nativeBuildInputs = nativeBuildPackages;
@@ -51,13 +51,13 @@
         };
         drvConfig = {
           mkDerivation = {
-            nativeBuildInputs = nativeBuildPackages;
+            inherit (depsDrvConfig.mkDerivation) nativeBuildInputs;
             buildInputs = packages;
-            shellHook = with pkgs; ''
-              export LD_LIBRARY_PATH="${
-                lib.makeLibraryPath libraries
-              }:$LD_LIBRARY_PATH"
-            '';
+            # shellHook = with pkgs; ''
+            #   export LD_LIBRARY_PATH="${
+            #     lib.makeLibraryPath libraries
+            #   }:$LD_LIBRARY_PATH"
+            # '';
             # export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
             # export OPENSSL_INCLUDE_DIR="${openssl.dev}/include/openssl"
             # export OPENSSL_LIB_DIR="${openssl.out}/lib"
