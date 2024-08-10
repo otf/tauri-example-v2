@@ -41,7 +41,6 @@
     ];
   in {
     nci.projects.${crateName}.path = ./.;
-    nci.toolchainConfig = ./rust-toolchain.toml;
     nci.crates = {
       ${crateName} = rec {
         depsDrvConfig = {
