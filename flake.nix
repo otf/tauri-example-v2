@@ -23,6 +23,7 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.nci.flakeModule
+        ./src-tauri/crates.nix
       ];
       systems = import inputs.systems;
       perSystem = {
@@ -31,14 +32,10 @@
         inputs',
         ...
       }: let
-        crateName = "helloworld";
-        crateOutputs = config.nci.outputs.${crateName};
+        crateOutputs = config.nci.outputs.tauri-app;
       in {
         devShells.default = crateOutputs.devShell;
         packages.default = crateOutputs.packages.release;
-
-        nci.projects.${crateName}.path = ./.;
-        nci.crates.${crateName} = {};
       };
       flake = {
         # The usual flake attributes can be defined here.
