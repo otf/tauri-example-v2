@@ -31,7 +31,7 @@
         pkgs,
         ...
       }: let
-        crateOutputs = config.nci.outputs.app;
+        crateOutputs = config.nci.outputs.tauri-app;
       in {
         devShells.default = crateOutputs.devShell.overrideAttrs (
           old:

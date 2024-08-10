@@ -4,7 +4,18 @@
     config,
     ...
   }: let
-    crateName = "app";
+    crateName = "tauri-app";
+
+    nativeBuildPackages = with pkgs; [
+      pkg-config
+      dbus
+      openssl
+      glib
+      gtk3
+      libsoup
+      webkitgtk
+      librsvg
+    ];
 
     libraries = with pkgs; [
       webkitgtk
@@ -13,14 +24,13 @@
       gdk-pixbuf
       glib
       dbus
-      openssl_3
+      openssl
       librsvg
     ];
 
     packages = with pkgs; [
       curl
       wget
-      pkg-config
       dbus
       openssl_3
       glib
@@ -29,32 +39,9 @@
       webkitgtk
       librsvg
     ];
-    # packages = with pkgs; [
-    #   # libclang
-    #   # curl
-    #   # wget
-    #   # dbus
-    #   # openssl
-    #   # glib
-    #   # libsoup
-    #   # webkitgtk
-    #   # librsvg
-    #   libappindicator-gtk3
-    #   cairo
-    #   # llvmPackages.libclang
-    # ];
-    # libraries = with pkgs; [
-    #   # webkitgtk
-    #   # gdk-pixbuf
-    #   # glib
-    #   # dbus
-    #   # librsvg
-    #   # atk
-    #   # gobject-introspection
-    #   # gtk4
-    # ];
   in {
     nci.projects.${crateName}.path = ./.;
+    nci.toolchainConfig = ./rust-toolchain.toml;
     nci.crates = {
       ${crateName} = {
         # depsDrvConfig = {
@@ -63,27 +50,29 @@
         drvConfig = {
           # deps.stdenv = pkgs.clangStdenv;
           mkDerivation = {
-            nativeBuildInputs = with pkgs; [pkg-config];
+            nativeBuildInputs = nativeBuildPackages;
             buildInputs = packages;
             # LIBCLANG_PATH = "${pkgs.llvmPackages.libclang}/lib";
-            shellHook = ''
+            shellHook = with pkgs; ''
               echo "Hello world, tauri with mkDerivation!"
-              export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath libraries}:$LD_LIBRARY_PATH
-              export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
+              # export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
+
+              export LD_LIBRARY_PATH="${
+                lib.makeLibraryPath libraries
+              }:$LD_LIBRARY_PATH"
+              export OPENSSL_INCLUDE_DIR="${openssl.dev}/include/openssl"
+              export OPENSSL_LIB_DIR="${openssl.out}/lib"
+              export OPENSSL_ROOT_DIR="${openssl.out}"
+              export RUST_SRC_PATH="${config.nci.toolchains.shell}/lib/rustlib/src/rust/library"
             '';
+
+            # buildPhase = ''
+            #   cargo tauri build
+            # '';
+            # dontInstall = true;
           };
         };
       };
     };
-
-    # devShells.default = config.nci.outputs.${crateName}.devShell.overrideAttrs (old: let
-    # in {
-    # shellHook = ''
-    #   ${old.shellHook or ""}
-    #   echo "Hello world, tauri!"
-    #   export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath libraries}:$LD_LIBRARY_PATH
-    #   export XDG_DATA_DIRS=${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS
-    # '';
-    # });
   };
 }
