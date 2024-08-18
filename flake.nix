@@ -1,5 +1,5 @@
 {
-  description = "tauri-app-v1";
+  description = "tauri-example-v1";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
