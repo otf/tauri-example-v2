@@ -17,6 +17,6 @@ pub fn run() {
 }
 
 #[tauri::command]
-fn greet(name: &str) {
-    println!("Hello, {}! You've been greeted from Rust!", name);
+fn greet(name: &str) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", name)
 }
