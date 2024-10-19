@@ -9,8 +9,10 @@
     <h1>Welcome to Tauri!</h1>
     <button onclick='greet("joe")'>greet</button>
     <script>
+      const { invoke } = window.__TAURI_INTERNALS__;
+
       async function greet(name) {
-        await window.__TAURI_INTERNALS__.invoke("greet", {name});
+        await invoke("greet", {name});
       }
     </script>
   </body>
