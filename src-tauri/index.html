@@ -10,8 +10,7 @@
     <button onclick='greet("joe")'>greet</button>
     <script>
       async function greet(name) {
-        // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-        await window.__TAURI_INVOKE__("greet", {name});
+        await window.__TAURI_INTERNALS__.invoke("greet", {name});
       }
     </script>
   </body>

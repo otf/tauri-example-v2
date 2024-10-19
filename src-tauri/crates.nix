@@ -4,40 +4,35 @@
     config,
     ...
   }: let
-    crateName = "tauri-app";
-
-    nativeBuildPackages = with pkgs; [
-      pkg-config
-      dbus
-      openssl
-      glib
-      gtk3
-      libsoup
-      webkitgtk
-      librsvg
-    ];
-
-    libraries = with pkgs; [
-      webkitgtk
-      gtk3
+    crateName = "app";
+    packages = with pkgs; [
+      at-spi2-atk
+      atkmm
       cairo
       gdk-pixbuf
       glib
-      dbus
-      openssl
-      librsvg
-    ];
-
-    packages = with pkgs; [
-      curl
-      wget
-      dbus
-      openssl_3
-      glib
+      gobject-introspection
+      gobject-introspection.dev
       gtk3
-      libsoup
-      webkitgtk
+      harfbuzz
       librsvg
+      libsoup_3
+      pango
+      webkitgtk_4_1
+      webkitgtk_4_1.dev
+      openssl_3
+    ];
+    libraries = with pkgs; [
+      pkg-config
+      glib.dev
+      libsoup_3.dev
+      webkitgtk_4_1.dev
+      at-spi2-atk.dev
+      gtk3.dev
+      gdk-pixbuf.dev
+      cairo.dev
+      pango.dev
+      harfbuzz.dev
     ];
   in {
     nci.projects.${crateName}.path = ./.;
@@ -45,8 +40,8 @@
       ${crateName} = rec {
         depsDrvConfig = {
           mkDerivation = {
-            nativeBuildInputs = nativeBuildPackages;
             buildInputs = packages;
+            nativeBuildInputs = libraries;
           };
         };
         drvConfig = {

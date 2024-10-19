@@ -1,5 +1,5 @@
 {
-  description = "tauri-example-v1";
+  description = "tauri-example-v2";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -31,12 +31,12 @@
         pkgs,
         ...
       }: let
-        crateOutputs = config.nci.outputs.tauri-app;
+        crateOutputs = config.nci.outputs.app;
       in {
         devShells.default = crateOutputs.devShell.overrideAttrs (
           old:
             with pkgs; {
-              packages = (old.packages or []) ++ [cargo-tauri];
+              packages = old.packages or [];
             }
         );
         packages.default = crateOutputs.packages.release;
